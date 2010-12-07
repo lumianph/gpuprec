@@ -1,0 +1,3 @@
+rm benchmark
+rm *.o
+

@@ -1,0 +1,7 @@
+
+*** DIRECTORIES ***
+
+inc: the inlined functions can be used in kernels
+test: test cases and examples using the library, use the make.sh script to compile
+
+
