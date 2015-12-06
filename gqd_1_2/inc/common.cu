@@ -4,9 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "gqd_type.h"		//type definitions for gdd_real and gqd_real
-#include "cuda_header.cu"
+#include "cuda_util.h"
 #include "inline.cu" 		//basic functions used by both gdd_real and gqd_real
 
+
+using namespace CUDAUtil;
+
+/** macro utility */
+#define GPUMALLOC(D_DATA, MEM_SIZE) checkCudaErrors(cudaMalloc(D_DATA, MEM_SIZE))
+#define TOGPU(D_DATA, H_DATA, MEM_SIZE) checkCudaErrors(cudaMemcpy(D_DATA, H_DATA, MEM_SIZE, cudaMemcpyHostToDevice))
+#define FROMGPU( H_DATA, D_DATA, MEM_SIZE ) checkCudaErrors(cudaMemcpy( H_DATA, D_DATA, MEM_SIZE, cudaMemcpyDeviceToHost))
+#define GPUTOGPU( DEST, SRC, MEM_SIZE ) checkCudaErrors(cudaMemcpy( DEST, SRC, MEM_SIZE, cudaMemcpyDeviceToDevice ))
+#define GPUFREE( MEM ) checkCudaErrors(cudaFree(MEM));
 
 
 /* type definitions, defined in the type.h */
@@ -95,7 +104,7 @@ void GDDStart(const int device) {
           make_dd( 2.81145725434552060e-15,  1.65088427308614326e-31)
 
         };
-        CUDA_SAFE_CALL( cudaMemcpyToSymbol( dd_inv_fact, h_inv_fact, sizeof(gdd_real)*n_dd_inv_fact ) );
+        checkCudaErrors( cudaMemcpyToSymbol( dd_inv_fact, h_inv_fact, sizeof(gdd_real)*n_dd_inv_fact ) );
 
         gdd_real h_sin_table [] = {
           make_dd(1.950903220161282758e-01, -7.991079068461731263e-18),
@@ -103,7 +112,7 @@ void GDDStart(const int device) {
           make_dd(5.555702330196021776e-01,  4.709410940561676821e-17),
           make_dd(7.071067811865475727e-01, -4.833646656726456726e-17)
         };
-	cutilSafeCall(cudaMemcpyToSymbol(d_dd_sin_table, h_sin_table, sizeof(gdd_real)*4));
+	checkCudaErrors(cudaMemcpyToSymbol(d_dd_sin_table, h_sin_table, sizeof(gdd_real)*4));
 
         gdd_real h_cos_table [] = {
           make_dd(9.807852804032304306e-01, 1.854693999782500573e-17),
@@ -111,7 +120,7 @@ void GDDStart(const int device) {
           make_dd(8.314696123025452357e-01, 1.407385698472802389e-18),
           make_dd(7.071067811865475727e-01, -4.833646656726456726e-17)
         };
-	cutilSafeCall(cudaMemcpyToSymbol(d_dd_cos_table, h_cos_table, sizeof(gdd_real)*4));
+	checkCudaErrors(cudaMemcpyToSymbol(d_dd_cos_table, h_cos_table, sizeof(gdd_real)*4));
 
 	printf("\tdone.\n");
 }
@@ -166,7 +175,7 @@ void GQDStart(const int device) {
 	  -4.89221204822661465e-49,  1.20086655902368901e-65);
 	h_inv_fact[14] = make_qd( 2.81145725434552060e-15,  1.65088427308614326e-31,
 	  -2.87777179307447918e-50,  4.27110689256293549e-67);
-	CUDA_SAFE_CALL( cudaMemcpyToSymbol( inv_fact, h_inv_fact, sizeof(gqd_real)*n_inv_fact ) );
+	checkCudaErrors( cudaMemcpyToSymbol( inv_fact, h_inv_fact, sizeof(gqd_real)*n_inv_fact ) );
 	
 	//sin table
 	//GPUMALLOC( (void**)&d_sin_table, sizeof(gqd_real)*256 );
@@ -685,7 +694,7 @@ void GQDStart(const int device) {
        2.0693376543497068e-33, 2.4677734957341755e-50)
 	};
 	//TOGPU( d_sin_table, h_sin_table, sizeof(gqd_real)*256 );
-	CUDA_SAFE_CALL( cudaMemcpyToSymbol( d_sin_table, h_sin_table, sizeof(gqd_real)*256 ) );
+	checkCudaErrors( cudaMemcpyToSymbol( d_sin_table, h_sin_table, sizeof(gqd_real)*256 ) );
 	
 	//cos table
 	GPUMALLOC( (void**)&d_cos_table, sizeof(gqd_real)*256 );
@@ -1203,7 +1212,7 @@ void GQDStart(const int device) {
   make_qd( 7.0710678118654757e-01, -4.8336466567264567e-17,
        2.0693376543497068e-33, 2.4677734957341755e-50)
 	};
-	CUDA_SAFE_CALL( cudaMemcpyToSymbol( d_cos_table, h_cos_table, sizeof(gqd_real)*256 ) );
+	checkCudaErrors( cudaMemcpyToSymbol( d_cos_table, h_cos_table, sizeof(gqd_real)*256 ) );
 	//TOGPU( d_cos_table, h_cos_table, sizeof(gqd_real)*256 );
 
 

@@ -189,31 +189,26 @@ float device_basic_template(T* h_in1, T* h_in2, T* h_out, const unsigned int num
         TOGPU(d_in1, h_in1, sizeof(T)*numElement);
 	TOGPU(d_in2, h_in2, sizeof(T)*numElement);
 
-        unsigned int timer = 0;
-	float elapsedTime = 0.0;
-
+	CUDATimer timer;
+	timer.go();
 	if(op == ADD) {
-	        startTimer(&timer);
 	        device_add_kernel<<<numBlock, numThread>>>(d_in1, d_in2, numElement, d_out);
-	        cutilCheckMsg("device_add_kernel");
-	        cutilSafeCall(cudaThreadSynchronize());
-	        elapsedTime = endTimer(&timer, "device_add_kernel");
+	        getLastCudaError("device_add_kernel");
+	        checkCudaErrors(cudaThreadSynchronize());
 	} else if (op == MUL) {
-                startTimer(&timer);
                 device_mul_kernel<<<numBlock, numThread>>>(d_in1, d_in2, numElement, d_out);
-                cutilCheckMsg("device_mul_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
-                elapsedTime = endTimer(&timer, "device_mul_kernel");
+                getLastCudaError("device_mul_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
 	} else if(op == DIV) {
-                startTimer(&timer);
                 device_div_kernel<<<numBlock, numThread>>>(d_in1, d_in2, numElement, d_out);
-                cutilCheckMsg("device_div_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
-                elapsedTime = endTimer(&timer, "device_div_kernel");
+                getLastCudaError("device_div_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
 	} else {
 		printf("!!!Never here!\n");
 		exit(EXIT_FAILURE);
 	}
+	timer.stop();
+	printf("device kernel time: %f\n", timer.report());
 
         FROMGPU(h_out, d_out, sizeof(T)*numElement);
 
@@ -221,7 +216,7 @@ float device_basic_template(T* h_in1, T* h_in2, T* h_out, const unsigned int num
 	GPUFREE(d_in2);
         GPUFREE(d_out);
 
-	return elapsedTime;
+	return timer.report();
 }
 
 float device_basic(gdd_real* h_in1, gdd_real* h_in2, gdd_real* h_out, const unsigned int numElement,
@@ -249,71 +244,59 @@ float device_math_template(T* h_in, const unsigned int numElement, T* h_out,
         GPUMALLOC((void**)&d_in, sizeof(T)*numElement);
         GPUMALLOC((void**)&d_out, sizeof(T)*numElement);
         TOGPU(d_in, h_in, sizeof(T)*numElement);
-        unsigned int timer = 0;
-	float elapsedTime = 0.0;
 
+	CUDATimer timer;
+	timer.go();
 	if(math == SQRT) {
-        	startTimer(&timer);
 	        device_sqrt_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-	        cutilCheckMsg("device_sqrt_kernel");
-	        cutilSafeCall(cudaThreadSynchronize());
-	        elapsedTime = endTimer(&timer, "device_sqrt_kernel");
+	        getLastCudaError("device_sqrt_kernel");
+	        checkCudaErrors(cudaThreadSynchronize());
 	} else if(math == SQR) {
-                startTimer(&timer);
                 device_sqr_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-                cutilCheckMsg("device_sqr_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
-                elapsedTime = endTimer(&timer, "device_sqr_kernel");
+                getLastCudaError("device_sqr_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
 	} else if(math == EXP) {
-                startTimer(&timer);
                 device_exp_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-                cutilCheckMsg("device_exp_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
-                elapsedTime = endTimer(&timer, "device_exp_kernel");
+                getLastCudaError("device_exp_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
 	} else if(math == LOG) {
-                startTimer(&timer);
                 device_log_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-                cutilCheckMsg("device_log_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
-                elapsedTime = endTimer(&timer, "device_log_kernel");
+                getLastCudaError("device_log_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
 	} 
 	else if(math == SIN) {
-                startTimer(&timer);
                 device_sin_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-                cutilCheckMsg("device_sin_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
-                elapsedTime = endTimer(&timer, "device_sin_kernel");
+                getLastCudaError("device_sin_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
 	} 
 	else if(math == COS) {
-                startTimer(&timer);
                 device_cos_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-                cutilCheckMsg("device_cos_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
-                elapsedTime = endTimer(&timer, "device_cos_kernel");
+                getLastCudaError("device_cos_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
 	} else if(math == TAN) {
-                startTimer(&timer);
                 device_tan_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-                cutilCheckMsg("device_tan_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
-                elapsedTime = endTimer(&timer, "device_tan_kernel");
+                getLastCudaError("device_tan_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
 	} else if(math == ATAN) {
                 /*startTimer(&timer);
                 device_atan_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-                cutilCheckMsg("device_atan_kernel");
-                cutilSafeCall(cudaThreadSynchronize());
+                getLastCudaError("device_atan_kernel");
+                checkCudaErrors(cudaThreadSynchronize());
                 elapsedTime = endTimer(&timer, "device_atan_kernel");*/
         } 
 	else {
 		printf("!!! Never here.\n");
 		exit(EXIT_FAILURE);
 	}
+	timer.stop();
+	printf("kernel time: %f\n", timer.report());
 
         FROMGPU(h_out, d_out, sizeof(T)*numElement);
 
         GPUFREE(d_in);
         GPUFREE(d_out);
 
-	return elapsedTime;
+	return timer.report();
 }
 
 
@@ -350,21 +333,22 @@ float device_defined_template(T* h_in, const unsigned int numElement, T* h_out,
         GPUMALLOC((void**)&d_in, sizeof(T)*numElement);
         GPUMALLOC((void**)&d_out, sizeof(T)*numElement);
         TOGPU(d_in, h_in, sizeof(T)*numElement);
-        unsigned int timer = 0;
-        float elapsedTime = 0.0;
 
-        startTimer(&timer);
+	CUDATimer timer;	
+
+	timer.go();
         device_defined_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
-        cutilCheckMsg("device_defined_kernel");
-        cutilSafeCall(cudaThreadSynchronize());
-        elapsedTime = endTimer(&timer, "device_defined_kernel");
+        getLastCudaError("device_defined_kernel");
+        checkCudaErrors(cudaThreadSynchronize());
+	timer.stop();
+	printf("kernel time: %f\n", timer.report());
 
         FROMGPU(h_out, d_out, sizeof(T)*numElement);
 
         GPUFREE(d_in);
         GPUFREE(d_out);
 
-        return elapsedTime;
+        return timer.report();
 }
 
 
@@ -407,13 +391,14 @@ void device_qrsmap(const unsigned int N, const int numBlock, const int numThread
 	TOGPU( d_x, &h_x, sizeof(gqd_real) );
 	gqd_real* d_c = NULL;
 	GPUMALLOC((void**)&d_c, sizeof(gqd_real)*N);
-	unsigned int timer = 0;
+	CUDATimer timer;
 
-	startTimer(&timer);	
+	timer.go();
 	gpu_fx_map_kernel1<<<numBlock, numThread>>>(d_x, d_c, N);
-	cutilSafeCall(cudaThreadSynchronize());
-	cutilCheckMsg("gpu_fx_map_kernel1");
-	endTimer(&timer, "gpu_fx_map_kernel");
+	checkCudaErrors(cudaThreadSynchronize());
+	getLastCudaError("gpu_fx_map_kernel1");
+	timer.stop();
+	printf("gpu_fx_map_kernel1 %f\n", timer.report());
 
 	GPUFREE(d_x);
 	GPUFREE(d_c);
