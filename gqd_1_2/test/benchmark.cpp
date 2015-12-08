@@ -375,6 +375,7 @@ void test_mul(const unsigned int numElement) {
         c_t high = "1.0";
         randArray(dd_in1, numElement, low, high, 777);
         randArray(dd_in2, numElement, low, high, 888);
+
         g_t* gdd_in1 = new g_t[numElement];
         g_t* gdd_in2 = new g_t[numElement];
         g_t* gdd_out = new g_t[numElement];
@@ -484,7 +485,7 @@ int main(int argc, char** argv) {
 	GDDEnd();
 
 	printf("\n\n");
-
+/*
 	printf("******************** quad-double precision *********************\n");
 	GQDStart();
 	printf("numElement = %d\n", numElement);
@@ -498,7 +499,7 @@ int main(int argc, char** argv) {
 	test_tan<qd_real, gqd_real>(numElement);
 	//test_atan<dd_real, gdd_real>(numElement);
 	GQDEnd();
-	
+*/	
 	fpu_fix_end(&old_cw);
 	return EXIT_SUCCESS;
 }

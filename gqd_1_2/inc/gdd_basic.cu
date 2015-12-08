@@ -154,9 +154,11 @@ gdd_real operator*(const gdd_real &a, const gdd_real &b)
 	double p1, p2;
 
 	p1 = two_prod(a.x, b.x, p2);
-	//p2 += (a.x * b.y + a.y * b.x);
-        p2 = p2 + (__dmul_rn(a.x,b.y) + __dmul_rn(a.y,b.x));
+	p2 += (a.x * b.y + a.y * b.x);
+	//p2 += __dadd_rn(__dmul_rn(a.x, b.y), __dmul_rn(a.y, b.x));
+        
 	p1 = quick_two_sum(p1, p2, p2);
+
 	return make_dd(p1, p2);
 }
 
