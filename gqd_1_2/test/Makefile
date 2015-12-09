@@ -17,26 +17,35 @@ DEF		=
 LIB		= -fopenmp -L/usr/local/cuda/lib64 -L/home/xuntao/lumian/local/lib -lqd -lcuda -lcudart
 
 # Output objects
-OUTPUT		= benchmark
+BENCH		= benchmark
+SAMPLE		= sample
 OBJS		= gqdtest_kernel.o test_util.o benchmark.o
 
 #########################################################################
 # Compilation
 
-$(OUTPUT): $(OBJS)
-	$(GCC) $(LIB) $(OBJS) -o $(OUTPUT)
+$(BENCH): $(OBJS)
+	$(GCC) $(LIB) $(OBJS) -o $(BENCH)
 
+$(SAMPLE): 
+	$(GCC) $(LIB) sample.o test_util.o
+	
 gqdtest_kernel.o: gqdtest_kernel.cu
 	$(NVCC) -c $(NVCC_FLAGS) $(OPT) $(INC) $(DEF) gqdtest_kernel.cu 
 
 test_util.o: test_util.cpp
-	$(GCC)  -c $(OPT) $(INC) $(DEF) test_util.cpp
+	$(GCC) -c $(OPT) $(INC) $(DEF) test_util.cpp
 
 benchmark.o: benchmark.cpp
-	$(GCC)  -c $(OPT) $(INC) $(DEF) benchmark.cpp
+	$(GCC) -c $(OPT) $(INC) $(DEF) benchmark.cpp
+	
+sample.o: sample.cpp
+	$(GCC) -c $(OPT) $(INC) $(DEF) sample.cpp
 	
 #########################################################################
-# Cleanup
+# Make targets
+all:
+	$(BENCH) $(SAMPLE)
 
 clean:
-	rm -f $(OUTPUT) $(OBJS)
+	rm -f $(BENCH) $(SAMPLE) *.o
