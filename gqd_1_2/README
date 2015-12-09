@@ -1,8 +1,7 @@
-todo
 
-*** DIRECTORIES ***
+** DIRECTORIES **
 
-inc: the inlined functions can be used in kernels
+inc: the inlined functions that are used together with your project files
 test: test cases and examples using the library, use the make.sh script to compile
 
 
