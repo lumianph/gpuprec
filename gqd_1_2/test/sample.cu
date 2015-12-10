@@ -9,7 +9,7 @@ using namespace std;
 
 
 __global__
-void compute_kenrel(const gdd_real* d_in1, const gdd_real* d_in2,
+void compute_kernel(const gdd_real* d_in1, const gdd_real* d_in2,
                          const unsigned int numElement,
                          gdd_real* d_out) {
         const unsigned numTotalThread = NUM_TOTAL_THREAD;
@@ -50,8 +50,8 @@ int main() {
   GPUMALLOC((void**)&d_in1, sizeof(gdd_real)*numElement);
 	GPUMALLOC((void**)&d_in2, sizeof(gdd_real)*numElement);
   GPUMALLOC((void**)&d_out, sizeof(gdd_real)*numElement);
-  TOGPU(d_in1, gdd_in1, sizeof(T)*numElement);
-	TOGPU(d_in2, gdd_in2, sizeof(T)*numElement);
+  TOGPU(d_in1, gdd_in1, sizeof(gdd_real)*numElement);
+	TOGPU(d_in2, gdd_in2, sizeof(gdd_real)*numElement);
 	
 	// Call the device kernel
 	compute_kernel<<<128, 128>>>(d_in1, d_in2, numElement, d_out);
@@ -59,7 +59,7 @@ int main() {
 	
 	// Copy GPU result back, still in gdd_real type
 	gdd_real* gdd_out = new gdd_real[numElement];
-	FROMGPU(gdd_out, d_out, sizeof(T)*numElement);
+	FROMGPU(gdd_out, d_out, sizeof(gdd_real)*numElement);
 	
 	// Convert gdd to dd_real for debug, gdd_real -> dd_real
   dd_real* ref_out = new dd_real[numElement];

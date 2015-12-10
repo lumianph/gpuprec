@@ -1,9 +1,8 @@
 #ifndef __GDD_GQD_INLINE_CU__
 #define __GDD_GQD_INLINE_CU__
 
-
-#define _QD_SPLITTER            (134217729.0)                   // = 2^27 + 1
-#define _QD_SPLIT_THRESH        (6.69692879491417e+299)         // = 2^996
+#define _GQD_SPLITTER            (134217729.0)                   // = 2^27 + 1
+#define _GQD_SPLIT_THRESH        (6.69692879491417e+299)         // = 2^996
 
 
 /****************Basic Funcitons *********************/
@@ -94,16 +93,16 @@ __host__ __device__
 void split(double a, double &hi, double &lo) 
 {
 	double temp;
-	if (a > _QD_SPLIT_THRESH || a < -_QD_SPLIT_THRESH)
+	if (a > _GQD_SPLIT_THRESH || a < -_GQD_SPLIT_THRESH)
 	{
 		a *= 3.7252902984619140625e-09;  // 2^-28
-		temp = _QD_SPLITTER * a;
+		temp = _GQD_SPLITTER * a;
 		hi = temp - (temp - a);
 		lo = a - hi;
 		hi *= 268435456.0;          // 2^28
 		lo *= 268435456.0;          // 2^28
 	} else 	{
-		temp = _QD_SPLITTER * a;
+		temp = _GQD_SPLITTER * a;
 		hi = temp - (temp - a);
 		lo = a - hi;
 	}

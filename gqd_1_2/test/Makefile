@@ -12,7 +12,7 @@ GCC		= g++
 
 # Common definition
 OPT		= -O3
-INC		= -I$(NVCC_HOME)/include -I../inc
+INC		= -I$(NVCC_HOME)/include -I../inc -I/home/xuntao/lumian/local/include
 DEF		=
 LIB		= -fopenmp -L/usr/local/cuda/lib64 -L/home/xuntao/lumian/local/lib -lqd -lcuda -lcudart
 
@@ -25,10 +25,10 @@ OBJS		= gqdtest_kernel.o test_util.o benchmark.o
 # Compilation
 
 $(BENCH): $(OBJS)
-	$(GCC) $(LIB) $(OBJS) -o $(BENCH)
+	$(GCC) $(OBJS) -o $(BENCH) $(LIB)
 
-$(SAMPLE): 
-	$(GCC) $(LIB) sample.o test_util.o
+$(SAMPLE): sample.o test_util.o
+	$(GCC) sample.o test_util.o -o $(SAMPLE) $(LIB)
 	
 gqdtest_kernel.o: gqdtest_kernel.cu
 	$(NVCC) -c $(NVCC_FLAGS) $(OPT) $(INC) $(DEF) gqdtest_kernel.cu 
@@ -38,14 +38,14 @@ test_util.o: test_util.cpp
 
 benchmark.o: benchmark.cpp
 	$(GCC) -c $(OPT) $(INC) $(DEF) benchmark.cpp
-	
-sample.o: sample.cpp
-	$(GCC) -c $(OPT) $(INC) $(DEF) sample.cpp
+
+sample.o: sample.cu
+	$(NVCC) -c $(OPT) $(INC) $(DEF) sample.cu
+
 	
 #########################################################################
 # Make targets
-all:
-	$(BENCH) $(SAMPLE)
+all: $(BENCH) $(SAMPLE)
 
 clean:
 	rm -f $(BENCH) $(SAMPLE) *.o
