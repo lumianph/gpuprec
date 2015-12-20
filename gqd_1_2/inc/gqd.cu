@@ -2,9 +2,9 @@
 #define __GQD_CU__
 
 /**
-* the API file
-* includes every thing for this library
-*/
+ * the API file
+ * includes every thing for this library
+ */
 
 /* gdd_library */
 #include "gdd_basic.cu"

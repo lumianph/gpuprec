@@ -6,7 +6,7 @@
  */
 
 #ifndef MIAN_CUDA_UTIL_H
-#define	MIAN_CUDA_UTIL_H
+#define MIAN_CUDA_UTIL_H
 
 #include <cuda.h>
 #include <cuda_runtime.h>
@@ -20,8 +20,8 @@
 
 
 /*constants*/
-#define NUM_TOTAL_THREAD	(gridDim.x*blockDim.x)
-#define GLOBAL_THREAD_OFFSET	(blockDim.x*blockIdx.x + threadIdx.x)
+#define NUM_TOTAL_THREAD (gridDim.x*blockDim.x)
+#define GLOBAL_THREAD_OFFSET (blockDim.x*blockIdx.x + threadIdx.x)
 
 namespace CUDAUtil {
 
@@ -46,13 +46,12 @@ namespace CUDAUtil {
         return elapsedTime;
     }
 
-
     class CUDATimer : public Timer {
     private:
         cudaEvent_t _start, _stop;
     public:
 
-        CUDATimer() : _start(), _stop(){
+        CUDATimer() : _start(), _stop() {
         };
 
         inline void go() {
@@ -96,22 +95,22 @@ namespace CUDAUtil {
         checkCudaErrors(cudaMalloc(&d_dest, size));
         checkCudaErrors(cudaMemcpy(d_dest, h_src, size, cudaMemcpyHostToDevice));
     };
-    
+
     template<class T>
-    inline void mallocAndCopyPointersToDevice(T** &d_ptr, const T* d_mem, 
-            const T* const* h_ptr, const T* h_mem, const size_t numPtr) {
-        T** h_tempPtr = (T**)malloc(sizeof(T*)*numPtr);
-        for(size_t i = 0; i < numPtr; i += 1) {
-            h_tempPtr[i] = const_cast<T*>(d_mem) + (h_ptr[i] - h_mem);
+    inline void mallocAndCopyPointersToDevice(T** &d_ptr, const T* d_mem,
+            const T * const* h_ptr, const T* h_mem, const size_t numPtr) {
+        T** h_tempPtr = (T**) malloc(sizeof (T*) * numPtr);
+        for (size_t i = 0; i < numPtr; i += 1) {
+            h_tempPtr[i] = const_cast<T*> (d_mem) + (h_ptr[i] - h_mem);
         }
-        mallocAndCopyToDevice(d_ptr, h_tempPtr, sizeof(T*)*numPtr);
-        
+        mallocAndCopyToDevice(d_ptr, h_tempPtr, sizeof (T*) * numPtr);
+
         delete[] h_tempPtr;
     }
 
 #define CUDA_FREE(ptr) checkCudaErrors(cudaFree(ptr))
-    
+
 } /*namespace CUDAUtil*/
 
-#endif	/* MIAN_CUDA_UTIL_H */
+#endif /* MIAN_CUDA_UTIL_H */
 

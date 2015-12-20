@@ -6,7 +6,7 @@
  */
 
 #ifndef TIMER_H
-#define	TIMER_H
+#define TIMER_H
 
 #include <sys/time.h>
 
@@ -56,5 +56,5 @@ public:
     }
 };
 
-#endif	/* TIMER_H */
+#endif /* TIMER_H */
 
