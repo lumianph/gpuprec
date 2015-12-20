@@ -2,9 +2,9 @@
 
 ## INTRODUCTION
 
-This project intends to develop extended precision libraries for GPGPU. It is originally developed during my PhD work (you still can visit the old page for gpuprec: https://code.google.com/p/gpuprec/). Recently I have fixed some issues of the libraries running on modern generations of GPUs. I hope you will find it useful for your research or development.
+This project intends to develop extended precision libraries for GPGPU. It is originally developed during my PhD study  (you can still visit the original page for gpuprec: https://code.google.com/p/gpuprec/). Recently I have fixed some issues of the libraries running on modern generations of GPUs. I hope you will find it useful for your research or development.
 
-This project consists of two projects.
+This project consists of two libraries.
 
 **GQD**: This library has implemented double-double (31 decimal digits) and quad-double (62 decimal digits) precision on the GPU. Due to built-in vectors available in CUDA, this library has a very good portability and is also easy to use. Most operations are implemented using function overriding. The algorithms mainly refer to the QD library on the CPU.
 
@@ -22,7 +22,7 @@ I have released GQD for now. GARPREC is still ongoing to make it workable on mod
 
 ## SUPPORTED OPERATORS
 
-Basic arithemtic operators are all well supported. The below list shows the major supported mathematical operators. Please let me know if your work requires more supporting.
+Basic arithmetic operators (+, -, \*,  /) are all well supported. The below list shows the major supported mathematical operators. Please let me know if your work requires more supporting.
 
 ```
 comparison (<, >, ==, ...)
@@ -53,11 +53,15 @@ make sample
 ```
 
 
-## ABOUT ACCURACY
+## ABOUT THE ACCURACY
 
-Most functions are tested extensively and but exhaustively. For basic arthmetic operators, it generates the same results as that of CPU-based QD. For mathematical operations, such as *exp* and *log*. There may be minor difference between the results of GQD and QD. We consider that this is because the native math functions on the CPU and GPU have different implementation details. You may investigate the result difference first before using GQD. For your reference, the file *gqd_test\benchmark.log* shows the output of our benchmark with accuracy test.
+Most functions are tested extensively and but exhaustively. For basic arithmetic operators, it should be able to generate the same results as that of CPU-based QD. For mathematical operations, such as *exp* and *log*. There may be minor difference between the results of GQD and QD. We consider that this is because the native math functions on the CPU and GPU have different implementation details. You may investigate the result difference first before using GQD. For your reference, the file *gqd_test\benchmark.log* shows the output of our benchmark with accuracy test.
 
-**NOTE: The compiler flag essentially affect the accuracy of the library. Please pay special attention to the flag** *--fmad=false* 
+**NOTE**: The compiler flags essentially affect the accuracy of the library. Please pay special attention to the nvcc flag 
+
+```
+--fmad=false
+```
 
 ## CITATION
 You can cite this library as:
