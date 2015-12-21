@@ -2,27 +2,27 @@
 
 ## INTRODUCTION
 
-This project intends to develop extended precision libraries for GPGPU. It is originally developed during my PhD study  (you can still visit the original page for gpuprec: https://code.google.com/p/gpuprec/). Recently I have fixed some issues of the libraries running on modern generations of GPUs. I hope you will find it useful for your research or development.
+This project develops extended precision libraries for GPGPU (CUDA). It was originally developed during my PhD study  (you can still visit the original page for gpuprec from Google Code: https://code.google.com/p/gpuprec/). Recently I am fixing issues of the libraries to make it run on modern generations of GPUs correctly. I hope you will find it useful to your work.
 
-This project consists of two libraries.
+This project essentially consists of two libraries.
 
-**GQD**: This library has implemented double-double (31 decimal digits) and quad-double (62 decimal digits) precision on the GPU. Due to built-in vectors available in CUDA, this library has a very good portability and is also easy to use. Most operations are implemented using function overriding. The algorithms mainly refer to the QD library on the CPU.
+**GQD**: This library has implemented double-double (31 decimal digits) and quad-double (62 decimal digits) precision on the GPU. It basically ports the algorithms from the QD library (http://crd.lbl.gov/~dhbailey/mpdist/qd-2.3.17.tar.gz) to the GPU. Due to built-in vectors available in CUDA, this library is very easy to use. Most operations are implemented using function overriding.
 
-**GARPREC**: This library supports arbitrary precision using varied number of native precision numbers. Due to the coalesced access adopted on the GPU for the efficiency, it uses a different memory layout from the traditional one. Therefore, corresponding modifications are necessary compared with the native precision. The algorithms are from the ARPREC library on the CPU.
+**GARPREC**: This library supports arbitrary precision using a number of native precision numbers. It basically ports the algorithms from the ARPREC library (http://crd.lbl.gov/~dhbailey/mpdist/arprec-2.2.18.tar.gz) to the GPU. Due to the coalesced access adopted on the GPU for the efficiency, it uses a different memory layout from the traditional one. Therefore, necessary modifications are required for your programs employing native precision.
 
-I have released GQD for now. GARPREC is still ongoing to make it workable on modern generations of GPUs.
+**Note that I have released the GQD only for now. GARPREC is still ongoing to make it workable on modern generations of GPUs.**
 
 ## INSTALL
 
-1. The GQD library is tested on a NVIDIA K40 GPU with CUDA 7.5. It is not guaranteed that it can generate the same result on other GPU archtectures, such as Fermi or earlier generations.
+1. The GQD library is tested on a NVIDIA K40 card with CUDA 7.5 installed. It is not guaranteed that it can generate the same results on other GPU architectures.
 
-2. To faciliate the debug and verification, the CPU QD library is highly recommended to be installed. It can be downloaded here: http://crd-legacy.lbl.gov/~dhbailey/mpdist/ , or you can find it in the folder *third* of this repository.
+2. To facilitate the debug and verification, the CPU QD library is highly recommended to be installed (our benchmark and sample cannot run without the QD library). It can be downloaded here: http://crd-legacy.lbl.gov/~dhbailey/mpdist/ , or you will find it in the folder *third* of this repository.
 
-3. There is no any complication or installation for this library. In order to use the library, you only need to include the file "gqd.cu" and put the folder "gqd" at a specific path. Please look at sample.cu and Makefile under the folder gqd_test for more details. Note that it is suggested to disable FMAD for the nvcc compiler (--fmad=false) to generate more consistent results as the CPU-based QD library.
+3. There is no installation required. In order to use the library, you only need to put the folder *gqd* under a suitable directory and then include "gqd.cu" in your project. Please look at sample.cu or benchmark.cu in the folder *gqd_test* for more details. Note that it is highly suggested to disable FMAD for the nvcc compiler (--fmad=false) to generate more consistent results as the CPU-based QD library.
 
 ## SUPPORTED OPERATORS
 
-Basic arithmetic operators (+, -, \*,  /) are all well supported. The below list shows the major supported mathematical operators. Please let me know if your work requires more supporting.
+Basic arithmetic operators (+, -, \*,  /) are all well supported that are able to generate consistent results to that of the CPU QD library. The below list shows other major supported mathematical operators. Please do let me know if your work requires more supporting.
 
 ```
 comparison (<, >, ==, ...)
@@ -36,7 +36,7 @@ tan
 
 ## BENCHMARK
 
-*benchmark.cu* is an accuracy and performance micro-benchmark to test most supported operators. Type the below commands to compile the executable files.
+*benchmark.cu* is a micro-benchmark for accuracy and performance. Type the below commands for compilation.
 
 ```
 cd gqd_test
@@ -45,7 +45,7 @@ make benchmark
 
 ## SAMPLE
 
-*sample.cu* shows a simple example of how to utilize the GQD library. It is quite self-explanatory. You can read it for more details. The following commands will compile the executable file.
+*sample.cu* illustrates a simple example to use the GQD library. It is self-explanatory. The following commands is used for compilation.
 
 ```
 cd gqd_test
@@ -55,9 +55,9 @@ make sample
 
 ## ABOUT THE ACCURACY
 
-Most functions are tested extensively and but exhaustively. For basic arithmetic operators, it should be able to generate the same results as that of CPU-based QD. For mathematical operations, such as *exp* and *log*. There may be minor difference between the results of GQD and QD. We consider that this is because the native math functions on the CPU and GPU have different implementation details. You may investigate the result difference first before using GQD. For your reference, the file *gqd_test\benchmark.log* shows the output of our benchmark with accuracy test.
+Most functions are tested extensively and but exhaustively. For basic arithmetic operators, it should be able to generate the same results as that of CPU-based QD. For mathematical operations, such as *exp* and *log*, there may be minor difference between GQD and QD. We consider that this is because the native mathematical functions on the CPU and GPU have different implementation details. You are suggested to investigate the result difference first before using GQD. For your reference, the file *gqd_test\benchmark.log* shows the output of our benchmark.
 
-**NOTE**: The compiler flags essentially affect the accuracy of the library. Please pay special attention to the nvcc flag 
+**NOTE**: The compiler flags essentially affect the accuracy of the library. Please pay special attention to disable FMAD.
 
 ```
 --fmad=false
