@@ -6,8 +6,8 @@ GDD turns on...
 	done.
 numElement = 10000000
 test_add start ............................................
-device kernel time: 0.002855 sec
-*** CPU add: 0.046 sec ***
+*** kernel time: 0.002867 sec ***
+*** CPU add: 0.052 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -19,8 +19,8 @@ Components(-6.7669112912682028e-01, 1.8909694171934176e-18)
 test_add done  ...........................................
 
 test_mul start ............................................
-device kernel time: 0.004346 sec
-*** CPU mul: 0.091 sec ***
+*** kernel time: 0.004368 sec ***
+*** CPU mul: 0.111 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -32,8 +32,8 @@ Components(6.5789397244536335e-02, -3.7026268763827025e-18)
 test_mul done  ...........................................
 
 test_div start ............................................
-device kernel time: 0.003393 sec
-*** CPU div: 0.187 sec ***
+*** kernel time: 0.003293 sec ***
+*** CPU div: 0.228 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -45,8 +45,8 @@ Components(2.1053896763926094e-01, 9.6712553960403120e-18)
 test_div done  ...........................................
 
 test_sqrt start ............................................
-kernel time: 0.001946 sec
-*** CPU sqrt: 0.372 sec ***
+*** kernel time: 0.001933 sec ***
+*** CPU sqrt: 0.454 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -58,8 +58,8 @@ Components(9.1661754126086603e-01, 9.3112035850108212e-18)
 test_sqrt done  ...........................................
 
 test_exp start ............................................
-kernel time: 0.017705 sec
-*** CPU exp: 4.547 sec ***
+*** kernel time: 0.017686 sec ***
+*** CPU exp: 5.535 sec ***
 abs. of max. relative error: 3.835350e-32
 abs. of avg. relative error: 9.093173e-34
 max. relative error elements
@@ -71,8 +71,8 @@ Components(2.5710196513121164e+00, 1.8788324014382198e-16)
 test_exp done  ...........................................
 
 test_log start ............................................
-kernel time: 0.019269 sec
-*** CPU log: 5.371 sec ***
+*** kernel time: 0.019237 sec ***
+*** CPU log: 6.478 sec ***
 abs. of max. relative error: 1.267762e-29
 abs. of avg. relative error: 2.379023e-33
 max. relative error elements
@@ -84,8 +84,8 @@ Components(-1.9445213030119921e-03, 9.0330496471836502e-20)
 test_log done  ...........................................
 
 test_sin start ............................................
-kernel time: 0.032872 sec
-*** CPU sin: 4.517 sec ***
+*** kernel time: 0.032814 sec ***
+*** CPU sin: 5.490 sec ***
 abs. of max. relative error: 1.563165e-31
 abs. of avg. relative error: 1.326964e-33
 max. relative error elements
@@ -97,8 +97,8 @@ Components(9.8565667885532129e-02, -5.9157645434465915e-18)
 test_sin done  ...........................................
 
 test_acos start ............................................
-kernel time: 0.063069 sec
-*** CPU acos: 7.583 sec ***
+*** kernel time: 0.062953 sec ***
+*** CPU acos: 9.168 sec ***
 abs. of max. relative error: 1.274968e-31
 abs. of avg. relative error: 2.008932e-33
 max. relative error elements
@@ -110,8 +110,8 @@ Components(8.2175069109152055e-01, -3.4170982479232236e-17)
 test_acos done  ...........................................
 
 test_asin start ............................................
-kernel time: 0.062804 sec
-*** CPU asin: 7.666 sec ***
+*** kernel time: 0.062994 sec ***
+*** CPU asin: 9.310 sec ***
 abs. of max. relative error: 1.298647e-31
 abs. of avg. relative error: 3.800247e-33
 max. relative error elements
@@ -123,8 +123,8 @@ Components(1.3050647629852269e-01, -1.0440306793675048e-17)
 test_asin done  ...........................................
 
 test_tan start ............................................
-kernel time: 0.024561 sec
-*** CPU tan: 5.163 sec ***
+*** kernel time: 0.024514 sec ***
+*** CPU tan: 6.265 sec ***
 abs. of max. relative error: 1.244443e-31
 abs. of avg. relative error: 1.508622e-33
 max. relative error elements
@@ -146,7 +146,7 @@ GQD turns on ...
 	done.
 numElement = 1000000
 test_add start ............................................
-device kernel time: 0.000735 sec
+*** kernel time: 0.000730 sec ***
 *** CPU add: 0.059 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
@@ -157,8 +157,8 @@ ref  = 6.57122139124590181778531274793248358004871062148584749152146682e-02
 test_add done  ...........................................
 
 test_mul start ............................................
-device kernel time: 0.001085 sec
-*** CPU mul: 0.090 sec ***
+*** kernel time: 0.000997 sec ***
+*** CPU mul: 0.110 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -168,8 +168,8 @@ ref  = -7.14178719219071865240589760774275093773777267227718391957523881e-01
 test_mul done  ...........................................
 
 test_div start ............................................
-device kernel time: 0.001817 sec
-*** CPU div: 0.446 sec ***
+*** kernel time: 0.001817 sec ***
+*** CPU div: 0.524 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -179,8 +179,8 @@ ref  = -9.25206809936496688558329907921574128955336878469542537488144349e-01
 test_div done  ...........................................
 
 test_sqrt start ............................................
-kernel time: 0.008306 sec
-*** CPU sqrt: 1.353 sec ***
+*** kernel time: 0.008326 sec ***
+*** CPU sqrt: 1.595 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -190,8 +190,8 @@ ref  = 3.01503403682557706558624023017417393577747082959954162717236779e-01
 test_sqrt done  ...........................................
 
 test_exp start ............................................
-kernel time: 0.024313 sec
-*** CPU exp: 4.992 sec ***
+*** kernel time: 0.023996 sec ***
+*** CPU exp: 5.950 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -201,8 +201,8 @@ ref  = 1.09516419569362988984427674258107666070982638669861843016173327e+00
 test_exp done  ...........................................
 
 test_log start ............................................
-kernel time: 0.133823 sec
-*** CPU log: 15.489 sec ***
+*** kernel time: 0.134687 sec ***
+*** CPU log: 18.641 sec ***
 abs. of max. relative error: 1.232631e-63
 abs. of avg. relative error: 9.463161e-68
 max. relative error elements
@@ -213,8 +213,8 @@ rel. error = 1.23263092925789024301777947594359254520530549116457425670907846e-6
 test_log done  ...........................................
 
 test_sin start ............................................
-kernel time: 0.054344 sec
-*** CPU sin: 4.712 sec ***
+*** kernel time: 0.054046 sec ***
+*** CPU sin: 5.713 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:
@@ -224,8 +224,8 @@ ref  = 9.07791548043770099286294581310539461281727753418635887681811127e-02
 test_sin done  ...........................................
 
 test_tan start ............................................
-kernel time: 0.056470 sec
-*** CPU tan: 5.428 sec ***
+*** kernel time: 0.058093 sec ***
+*** CPU tan: 6.557 sec ***
 abs. of max. relative error: 0.000000e+00
 abs. of avg. relative error: 0.000000e+00
 a sample:

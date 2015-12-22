@@ -217,7 +217,7 @@ float device_basic_template(T* h_in1, T* h_in2, T* h_out, const unsigned int num
         exit(EXIT_FAILURE);
     }
     timer.stop();
-    printf("device kernel time: %f sec\n", timer.report() / 1000.f);
+    printf("*** kernel time: %f sec ***\n", timer.report() / 1000.f);
 
     FROMGPU(h_out, d_out, sizeof (T) * numElement);
 
@@ -301,7 +301,7 @@ float device_math_template(T* h_in, const unsigned int numElement, T* h_out,
         exit(EXIT_FAILURE);
     }
     timer.stop();
-    printf("kernel time: %f sec\n", timer.report() / 1000.f);
+    printf("*** kernel time: %f sec ***\n", timer.report() / 1000.f);
 
     FROMGPU(h_out, d_out, sizeof (T) * numElement);
 
@@ -349,7 +349,7 @@ float device_defined_template(T* h_in, const unsigned int numElement, T* h_out,
     getLastCudaError("device_defined_kernel");
     checkCudaErrors(cudaThreadSynchronize());
     timer.stop();
-    printf("kernel time: %f sec\n", timer.report() / 1000.f);
+    printf("*** kernel time: %f sec ***\n", timer.report() / 1000.f);
 
     FROMGPU(h_out, d_out, sizeof (T) * numElement);
 
