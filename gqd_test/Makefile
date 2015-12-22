@@ -40,7 +40,7 @@ benchmark.o: benchmark.cpp
 	$(GCC) -c $(OPT) $(INC) $(DEF) benchmark.cpp
 
 sample.o: sample.cu
-	$(NVCC) -c $(OPT) $(INC) $(DEF) sample.cu
+	$(NVCC) -c $(NVCC_FLAGS) $(OPT) $(INC) $(DEF) sample.cu
 
 	
 #########################################################################

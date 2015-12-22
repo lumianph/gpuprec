@@ -612,7 +612,6 @@ gqd_real tanh(const gqd_real &a) {
 
 __device__
 void sincosh(const gqd_real &a, gqd_real &s, gqd_real &c) {
-    return make_qd(0.0);
 }
 
 __device__

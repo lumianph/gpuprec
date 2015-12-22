@@ -547,13 +547,13 @@ int main(int argc, char** argv) {
     unsigned int old_cw;
     fpu_fix_start(&old_cw);
 
-    unsigned int numElement = 1000000;
 
 
     printf("==================================================================\n");
     printf("******************** double-double precision *********************\n");
     printf("==================================================================\n");
     GDDStart();
+    unsigned int numElement = 10000000;
     printf("numElement = %d\n", numElement);
     test_add<dd_real, gdd_real>(numElement);
     test_mul<dd_real, gdd_real>(numElement);
@@ -563,7 +563,7 @@ int main(int argc, char** argv) {
     test_log<dd_real, gdd_real>(numElement);
     test_sin<dd_real, gdd_real>(numElement);
     test_acos<dd_real, gdd_real>(numElement);
-    test_asin(dd_real, gqd_real)(numElement);
+    test_asin<dd_real, gdd_real>(numElement);
     test_tan<dd_real, gdd_real>(numElement);
     GDDEnd();
 
@@ -573,6 +573,7 @@ int main(int argc, char** argv) {
     printf("********************* quad-double precision **********************\n");
     printf("==================================================================\n");
     GQDStart();
+    numElement = 1000000;
     printf("numElement = %d\n", numElement);
     test_add<qd_real, gqd_real>(numElement);
     test_mul<qd_real, gqd_real>(numElement);
