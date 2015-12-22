@@ -185,6 +185,90 @@ void test_sin(const unsigned int numElement) {
 }
 
 template<class c_t, class g_t>
+void test_acos(const unsigned int numElement) {
+
+    FUNC_START_MSG;
+
+    c_t* dd_in = new c_t[numElement];
+    c_t* gold_out = new c_t[numElement];
+    c_t low = "-1.0";
+    c_t high = "1.0";
+    randArray(dd_in, numElement, low, high);
+    g_t* gdd_in = new g_t[numElement];
+    g_t* gdd_out = new g_t[numElement];
+    qd2gqd(dd_in, gdd_in, numElement);
+
+
+    unsigned int numBlock = 128;
+    unsigned int numThread = 128;
+    device_math(gdd_in, numElement, gdd_out, ACOS, numBlock, numThread);
+    c_t* gpu_out = new c_t[numElement];
+    gqd2qd(gdd_out, gpu_out, numElement);
+
+
+    INIT_TIMER;
+    START_TIMER;
+#pragma omp parallel for
+    for (unsigned int i = 0; i < numElement; i++) {
+        gold_out[i] = acos(dd_in[i]);
+    }
+    END_TIMER;
+    PRINT_TIMER_SEC("CPU acos");
+
+    checkTwoArray(gold_out, gpu_out, numElement);
+
+    delete[] dd_in;
+    delete[] gold_out;
+    delete[] gdd_in;
+    delete[] gdd_out;
+    delete[] gpu_out;
+
+    FUNC_END_MSG;
+}
+
+template<class c_t, class g_t>
+void test_asin(const unsigned int numElement) {
+
+    FUNC_START_MSG;
+
+    c_t* dd_in = new c_t[numElement];
+    c_t* gold_out = new c_t[numElement];
+    c_t low = "-1.0";
+    c_t high = "1.0";
+    randArray(dd_in, numElement, low, high);
+    g_t* gdd_in = new g_t[numElement];
+    g_t* gdd_out = new g_t[numElement];
+    qd2gqd(dd_in, gdd_in, numElement);
+
+
+    unsigned int numBlock = 128;
+    unsigned int numThread = 128;
+    device_math(gdd_in, numElement, gdd_out, ASIN, numBlock, numThread);
+    c_t* gpu_out = new c_t[numElement];
+    gqd2qd(gdd_out, gpu_out, numElement);
+
+
+    INIT_TIMER;
+    START_TIMER;
+#pragma omp parallel for
+    for (unsigned int i = 0; i < numElement; i++) {
+        gold_out[i] = asin(dd_in[i]);
+    }
+    END_TIMER;
+    PRINT_TIMER_SEC("CPU asin");
+
+    checkTwoArray(gold_out, gpu_out, numElement);
+
+    delete[] dd_in;
+    delete[] gold_out;
+    delete[] gdd_in;
+    delete[] gdd_out;
+    delete[] gpu_out;
+
+    FUNC_END_MSG;
+}
+
+template<class c_t, class g_t>
 void test_cos(unsigned int numElement) {
 
     FUNC_START_MSG;
@@ -478,6 +562,8 @@ int main(int argc, char** argv) {
     test_exp<dd_real, gdd_real>(numElement);
     test_log<dd_real, gdd_real>(numElement);
     test_sin<dd_real, gdd_real>(numElement);
+    test_acos<dd_real, gdd_real>(numElement);
+    test_asin(dd_real, gqd_real)(numElement);
     test_tan<dd_real, gdd_real>(numElement);
     GDDEnd();
 

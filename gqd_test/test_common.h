@@ -8,6 +8,6 @@
 
 enum OPERATOR{ADD, MUL, DIV};
 
-enum MATH{SQRT, SQR, EXP, LOG, SIN, COS, TAN, ASIN, ATAN};
+enum MATH{SQRT, SQR, EXP, LOG, SIN, COS, TAN, ASIN, ACOS, ATAN};
 
 #endif 

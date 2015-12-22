@@ -133,6 +133,30 @@ void device_cos_kernel(const T* d_in, const unsigned int numElement,
 
 template<class T>
 __global__
+void device_acos_kernel(const T* d_in, const unsigned int numElement,
+        T* d_out) {
+    const unsigned numTotalThread = NUM_TOTAL_THREAD;
+    const unsigned globalThreadOffset = GLOBAL_THREAD_OFFSET;
+
+    for (unsigned int i = globalThreadOffset; i < numElement; i += numTotalThread) {
+        d_out[i] = acos(d_in[i]);
+    }
+}
+
+template<class T>
+__global__
+void device_asin_kernel(const T* d_in, const unsigned int numElement,
+        T* d_out) {
+    const unsigned numTotalThread = NUM_TOTAL_THREAD;
+    const unsigned globalThreadOffset = GLOBAL_THREAD_OFFSET;
+
+    for (unsigned int i = globalThreadOffset; i < numElement; i += numTotalThread) {
+        d_out[i] = asin(d_in[i]);
+    }
+}
+
+template<class T>
+__global__
 void device_tan_kernel(const T* d_in, const unsigned int numElement,
         T* d_out) {
     const unsigned numTotalThread = NUM_TOTAL_THREAD;
@@ -246,13 +270,11 @@ float device_math_template(T* h_in, const unsigned int numElement, T* h_out,
         device_log_kernel << <numBlock, numThread>>>(d_in, numElement, d_out);
         getLastCudaError("device_log_kernel");
         checkCudaErrors(cudaThreadSynchronize());
-    }
-    else if (math == SIN) {
+    } else if (math == SIN) {
         device_sin_kernel << <numBlock, numThread>>>(d_in, numElement, d_out);
         getLastCudaError("device_sin_kernel");
         checkCudaErrors(cudaThreadSynchronize());
-    }
-    else if (math == COS) {
+    } else if (math == COS) {
         device_cos_kernel << <numBlock, numThread>>>(d_in, numElement, d_out);
         getLastCudaError("device_cos_kernel");
         checkCudaErrors(cudaThreadSynchronize());
@@ -260,14 +282,21 @@ float device_math_template(T* h_in, const unsigned int numElement, T* h_out,
         device_tan_kernel << <numBlock, numThread>>>(d_in, numElement, d_out);
         getLastCudaError("device_tan_kernel");
         checkCudaErrors(cudaThreadSynchronize());
+    } else if (math == ACOS) {
+        device_acos_kernel << <numBlock, numThread>>>(d_in, numElement, d_out);
+        getLastCudaError("device_acos_kernel");
+        checkCudaErrors(cudaThreadSynchronize());
+    } else if (math == ASIN) {
+        device_asin_kernel << <numBlock, numThread>>>(d_in, numElement, d_out);
+        getLastCudaError("device_asin_kernel");
+        checkCudaErrors(cudaThreadSynchronize());
     } else if (math == ATAN) {
         /*startTimer(&timer);
         device_atan_kernel<<<numBlock, numThread>>>(d_in, numElement, d_out);
         getLastCudaError("device_atan_kernel");
         checkCudaErrors(cudaThreadSynchronize());
         elapsedTime = endTimer(&timer, "device_atan_kernel");*/
-    }
-    else {
+    } else {
         printf("!!! Never here.\n");
         exit(EXIT_FAILURE);
     }
