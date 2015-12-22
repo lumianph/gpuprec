@@ -71,6 +71,10 @@ Most functions are tested extensively and but exhaustively. For basic arithmetic
 1. For invalid input numbers, the library currently usually only returns 0.0, instead of NaN or other exceptions. For example, for acos, if the input number abs(a) > 1.0, the library simple returns 0.0, but a NaN by the QD library.
 2. It may take very long time (tens of minutes) to compile the code if you enable ALL_MATH
 
+## TODO
+1. The previous code of the test cases is pretty messy. I am working on it.
+2. Define correct error return code, e.g., NaN.
+
 ## CITATION
 You can cite this library as:
 
