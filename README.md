@@ -20,7 +20,7 @@ This project essentially consists of two libraries.
 
 3. There is no installation required. In order to use the library, you only need to put the folder *gqd* under a suitable directory and then include "gqd.cu" in your project. Please look at sample.cu or benchmark.cu in the folder *gqd_test* for more details. Note that it is highly suggested to disable FMAD for the nvcc compiler (--fmad=false) to generate more consistent results as the CPU-based QD library.
 
-4. By default, the advanced functions (atan, acos, asin, sinh, cosh, tanh, asinh, acosh, atanh) for the quad-double precision is disabled. This is because it take very long time to compile the test cases (tens of minutes). If you do need those functions in your work, please enable the definition ALL_MATH.
+4. By default, the advanced functions (atan, acos, asin, sinh, cosh, tanh, asinh, acosh, atanh) for the quad-double precision is disabled. This is because it take very long time to compile the test cases (tens of minutes). If you do need those functions in your work, please enable the definition ALL_MATH. **NOTE that, for the current commitment, you still can call those functions even without ALL_MATH defined, but it will just return 0.0 (I am fixing it).**
 
 ## SUPPORTED OPERATORS
 

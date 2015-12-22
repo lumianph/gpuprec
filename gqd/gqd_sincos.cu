@@ -573,6 +573,62 @@ gqd_real atanh(const gqd_real &a) {
 
     return mul_pwr2(log((1.0 + a) / (1.0 - a)), 0.5);
 }
+#else
+
+__device__
+gqd_real atan2(const gqd_real &y, const gqd_real &x) {
+    return make_qd(0.0);
+}
+
+__device__
+gqd_real atan(const gqd_real &a) {
+    return make_qd(0.0);
+}
+
+__device__
+gqd_real asin(const gqd_real &a) {
+    return make_qd(0.0);
+}
+
+__device__
+gqd_real acos(const gqd_real &a) {
+    return make_qd(0.0);
+}
+
+__device__
+gqd_real sinh(const gqd_real &a) {
+    return make_qd(0.0);
+}
+
+__device__
+gqd_real cosh(const gqd_real &a) {
+    return make_qd(0.0);
+}
+
+__device__
+gqd_real tanh(const gqd_real &a) {
+    return make_qd(0.0);
+}
+
+__device__
+void sincosh(const gqd_real &a, gqd_real &s, gqd_real &c) {
+    return make_qd(0.0);
+}
+
+__device__
+gqd_real asinh(const gqd_real &a) {
+    return log(a + sqrt(sqr(a) + 1.0));
+}
+
+__device__
+gqd_real acosh(const gqd_real &a) {
+    return make_qd(0.0);
+}
+
+__device__
+gqd_real atanh(const gqd_real &a) {
+    return make_qd(0.0);
+}
 
 
 #endif /* ALL_MATH */
