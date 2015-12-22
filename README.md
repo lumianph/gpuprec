@@ -20,6 +20,8 @@ This project essentially consists of two libraries.
 
 3. There is no installation required. In order to use the library, you only need to put the folder *gqd* under a suitable directory and then include "gqd.cu" in your project. Please look at sample.cu or benchmark.cu in the folder *gqd_test* for more details. Note that it is highly suggested to disable FMAD for the nvcc compiler (--fmad=false) to generate more consistent results as the CPU-based QD library.
 
+4. By default, the advanced functions (atan, acos, asin, sinh, cosh, tanh, asinh, acosh, atanh) for the quad-double precision is disabled. This is because it take very long time to compile the test cases (tens of minutes). If you do need those functions in your work, please enable the definition ALL_MATH.
+
 ## SUPPORTED OPERATORS
 
 Basic arithmetic operators (+, -, \*,  /) are all well supported that are able to generate consistent results to that of the CPU QD library. The below list shows other major supported mathematical operators. Please do let me know if your work requires more supporting.
@@ -31,6 +33,8 @@ exp
 log
 sin
 cos
+acos
+asin
 tan
 ```
 
@@ -65,6 +69,7 @@ Most functions are tested extensively and but exhaustively. For basic arithmetic
 ## KNOWN ISSUES
 
 1. For invalid input numbers, the library currently usually only returns 0.0, instead of NaN or other exceptions. For example, for acos, if the input number abs(a) > 1.0, the library simple returns 0.0, but a NaN by the QD library.
+2. It may take very long time (tens of minutes) to compile the code if you enable ALL_MATH
 
 ## CITATION
 You can cite this library as:
