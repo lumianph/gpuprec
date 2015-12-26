@@ -1,8 +1,8 @@
 #ifndef __GQD_COMMON_CU__
 #define __GQD_COMMON_CU__
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdio>
+#include <cstdlib>
 #include "gqd_type.h"  //type definitions for gdd_real and gqd_real
 #include "cuda_util.h"
 #include "inline.cu"   //basic functions used by both gdd_real and gqd_real

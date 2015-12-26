@@ -1,6 +1,7 @@
 
-#include <stdio.h>
-#include <stdlib.h>
+#include <cstdlib>
+#include <cstdio>
+#include <cstdarg>
 #include <iostream>
 #include <qd/qd_real.h>
 #include <qd/fpu.h>
@@ -537,6 +538,14 @@ void test_div(const unsigned int numElement) {
     delete[] gpu_out;
 
     FUNC_END_MSG;
+}
+
+void testFunc(int n, ...) {
+    cout << "n: " << n << endl;
+    va_list vl;
+    va_start(vl, n);
+    
+    va_end(vl);
 }
 
 int main(int argc, char** argv) {
