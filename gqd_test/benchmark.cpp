@@ -6,12 +6,18 @@
 #include <qd/qd_real.h>
 #include <qd/fpu.h>
 #include <omp.h>
+#include <stdexcept>
 #include <cuda.h>
+#include <vector>
+#include <memory>
+
+#include "cuda_util.h"
 #include "test_util.h"
 #include "test_common.h"
 #include "gqdtest.h"
 
 using namespace std;
+using namespace CUDAUtil;
 
 
 /* general macro utilities */
@@ -540,14 +546,7 @@ void test_div(const unsigned int numElement) {
     FUNC_END_MSG;
 }
 
-void testFunc(int n, ...) {
-    cout << "n: " << n << endl;
-    va_list vl;
-    va_start(vl, n);
-    
-    va_end(vl);
-}
-
+/*
 int main(int argc, char** argv) {
     const int omp_num_thread = 16;
     omp_set_num_threads(omp_num_thread);
@@ -597,4 +596,90 @@ int main(int argc, char** argv) {
     fpu_fix_end(&old_cw);
     return EXIT_SUCCESS;
 }
+
+*/
+
+enum OP_TYPE {UNARY = 1, BINARY = 2};
+
+template<class GPU_T>
+void testFunc(const int numElement, OP_TYPE type, ...) {
+	cout << "numElement: " << numElement << endl;
+    cout << "op type: " << type << endl;
+    va_list vl;
+
+	va_start(vl, type);
+
+	if (UNARY == type) {
+		GPU_T a = va_arg(vl, GPU_T);
+		cout << "a = " << a << endl;
+	} else if(BINARY == type) {
+		GPU_T a = va_arg(vl, GPU_T);
+		GPU_T b = va_arg(vl, GPU_T);
+		cout << "a = " << a << endl;
+		cout << "b = " << b << endl;
+	} else {
+		throw std::runtime_error("UNKNOW OP_TYPE");
+	}
+ 
+    va_end(vl);
+}
+
+template<typename T_R, typename T_A, typename T_B>
+T_R op_add(const T_A& a, const T_B& b) {
+	return a + b;
+}
+
+template<typename T_R, typename T_A>
+T_R op_exp(const T_A& a) {
+	return exp(a);
+}
+
+
+
+template<typename T_OUT, typename T_IN1, class OP>
+void benchmark(const int numElement, OP op) {
+	// Allocate host memory for operands
+	T_IN1* h_in1 = new T_IN1[numElement];
+
+	// Generate randome numbers [-1, 1] for the operands on the host
+	randArray(h_in1, numElement, -1.0, 1.0);	
+
+	// Copy the input data to the device
+	T_IN1* d_in1 = NULL;
+	GPUMALLOC((void**)&d_in1, sizeof(T_IN1)*numElement);
+	TOGPU(d_in1, h_in1, sizeof(T_IN1)*numElement);
+
+	// Allocate memory for results on the device 
+	T_OUT* d_out = NULL;
+	GPUMALLOC((void**)&d_out, sizeof(T_OUT)*numElement);
+
+	// Performance computation on device
+	cout << "Computation on device done" << endl;
+
+	// Performance computation on host
+	cout << "Computation on host done" << endl;
+	
+
+	// Memory cleanup
+	delete[] h_in1;
+	GPUFREE(d_in1);
+	GPUFREE(d_out);
+}
+
+template<class OP, typename T_R, typename T_IN1, typename T_IN2>
+void benchmark(const int numElement, OP op) {
+
+}
+
+int main(int argc, char** argv) {
+	const int numElement = 1000000;
+
+	//testFunc<double>(numElement, BINARY, 2.10, 3.10, &op_add<double, double, double>);
+	
+	//testFunc<int>(numElement, UNARY, 4, &op_exp<double, int>);
+
+	benchmark<gdd_real, gdd_real>(numElement, &op_exp<dd_real, dd_real>);
+}
+
+
 

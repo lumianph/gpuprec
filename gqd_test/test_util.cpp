@@ -65,6 +65,16 @@ void gqd2qd(gqd_real* gqd_data, qd_real* qd_data, const unsigned int numElement)
     }
 }
 
+void randArray(gdd_real* data, const unsigned numElement,
+        dd_real low, dd_real high, int seed) {
+	dd_real* dd_data = new dd_real[numElement];
+
+	randArray(dd_data, numElement, low, high, seed);
+	qd2gqd(dd_data, data, numElement);
+
+	delete[] dd_data;
+}
+
 int checkTwoArray(const dd_real* gold, const dd_real* ref, const int numElement) {
     dd_real maxRelError = 0.0;
     dd_real avgRelError = 0.0;

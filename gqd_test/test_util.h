@@ -13,6 +13,9 @@ void randArray(dd_real* data, const unsigned numElement,
 void randArray(qd_real* data, const unsigned numElement,
         qd_real low, qd_real up, int seed = 0);
 
+void randArray(gdd_real* data, const unsigned numElement,
+        dd_real low, dd_real high, int seed = 0);
+
 void qd2gqd(dd_real* dd_data, gdd_real* gdd_data, const unsigned int numElement);
 
 void qd2gqd(qd_real* qd_data, gqd_real* gqd_data, const unsigned int numElement);

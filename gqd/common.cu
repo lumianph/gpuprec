@@ -10,12 +10,6 @@
 
 using namespace CUDAUtil;
 
-/** macro utility */
-#define GPUMALLOC(D_DATA, MEM_SIZE) checkCudaErrors(cudaMalloc(D_DATA, MEM_SIZE))
-#define TOGPU(D_DATA, H_DATA, MEM_SIZE) checkCudaErrors(cudaMemcpy(D_DATA, H_DATA, MEM_SIZE, cudaMemcpyHostToDevice))
-#define FROMGPU( H_DATA, D_DATA, MEM_SIZE ) checkCudaErrors(cudaMemcpy( H_DATA, D_DATA, MEM_SIZE, cudaMemcpyDeviceToHost))
-#define GPUTOGPU( DEST, SRC, MEM_SIZE ) checkCudaErrors(cudaMemcpy( DEST, SRC, MEM_SIZE, cudaMemcpyDeviceToDevice ))
-#define GPUFREE( MEM ) checkCudaErrors(cudaFree(MEM));
 
 
 /* type definitions, defined in the type.h */

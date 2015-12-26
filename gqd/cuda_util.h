@@ -23,8 +23,8 @@
 #define NUM_TOTAL_THREAD (gridDim.x*blockDim.x)
 #define GLOBAL_THREAD_OFFSET (blockDim.x*blockIdx.x + threadIdx.x)
 
-namespace CUDAUtil {
 
+namespace CUDAUtil {
 
     /*timing functions*/
     //return ms, rather than second!
@@ -109,6 +109,13 @@ namespace CUDAUtil {
     }
 
 #define CUDA_FREE(ptr) checkCudaErrors(cudaFree(ptr))
+
+/** macro utility */
+#define GPUMALLOC(D_DATA, MEM_SIZE) checkCudaErrors(cudaMalloc(D_DATA, MEM_SIZE))
+#define TOGPU(D_DATA, H_DATA, MEM_SIZE) checkCudaErrors(cudaMemcpy(D_DATA, H_DATA, MEM_SIZE, cudaMemcpyHostToDevice))
+#define FROMGPU( H_DATA, D_DATA, MEM_SIZE ) checkCudaErrors(cudaMemcpy( H_DATA, D_DATA, MEM_SIZE, cudaMemcpyDeviceToHost))
+#define GPUTOGPU( DEST, SRC, MEM_SIZE ) checkCudaErrors(cudaMemcpy( DEST, SRC, MEM_SIZE, cudaMemcpyDeviceToDevice ))
+#define GPUFREE( MEM ) checkCudaErrors(cudaFree(MEM));
 
 } /*namespace CUDAUtil*/
 
