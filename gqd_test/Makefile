@@ -17,27 +17,25 @@ DEF				=
 LIB				= -fopenmp -L/usr/local/cuda/lib64 -L/home/xuntao/lumian/local/lib -lqd -lcuda -lcudart
 
 # Output objects
-BENCH		= benchmark
-SAMPLE		= sample
-OBJS		= gqdtest_kernel.o test_util.o benchmark.o
+BENCH			= benchmark
+SAMPLE			= sample
+BENCH_OBJS		= test_util.o benchmark.o
+SAMPLE_OBJS		= sample.o test_util.o
 
 #########################################################################
 # Compilation
 
-$(BENCH): $(OBJS)
-	$(GCC) $(OBJS) -o $(BENCH) $(LIB)
+$(BENCH): $(BENCH_OBJS)
+	$(GCC) $(BENCH_OBJS) -o $(BENCH) $(LIB)
 
-$(SAMPLE): sample.o test_util.o
+$(SAMPLE): $(SAMPLE_OBJS)
 	$(GCC) sample.o test_util.o -o $(SAMPLE) $(LIB)
-	
-gqdtest_kernel.o: gqdtest_kernel.cu
-	$(NVCC) -c $(NVCC_FLAGS) $(INC) $(DEF) gqdtest_kernel.cu 
 
 test_util.o: test_util.cpp
 	$(GCC) -c $(GCC_FLAGS) $(INC) $(DEF) test_util.cpp
 
-benchmark.o: benchmark.cpp
-	$(NVCC) -c $(NVCC_FLAGS) $(INC) $(DEF) benchmark.cpp
+benchmark.o: benchmark.cu
+	$(NVCC) -c $(NVCC_FLAGS) $(INC) $(DEF) benchmark.cu
 
 sample.o: sample.cu
 	$(NVCC) -c $(NVCC_FLAGS) $(INC) $(DEF) sample.cu

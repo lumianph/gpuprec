@@ -146,3 +146,18 @@ int checkTwoArray(const qd_real* gold, const qd_real* ref, const int numElement)
 
     return maxId;
 }
+
+ostream& operator<<(ostream& os, const gqd_real& a) {
+	qd_real b(a.x, a.y, a.z, a.w);
+	os << b;
+
+	return os;
+}
+
+ostream& operator<<(ostream& os, const gdd_real& a) {
+	dd_real b(a.x, a.y);
+	os << b;
+
+	return os;
+}
+

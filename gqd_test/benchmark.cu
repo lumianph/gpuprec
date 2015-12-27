@@ -1,3 +1,6 @@
+#ifndef BENCHMARK_CU
+#define BENCHMARK_CU
+
 
 #include <cstdlib>
 #include <cstdio>
@@ -15,9 +18,9 @@
 #include "test_util.h"
 #include "test_common.h"
 #include "gqdtest.h"
+#include "benchmark_kernel.cu"
 
 using namespace std;
-using namespace CUDAUtil;
 
 
 /* general macro utilities */
@@ -625,19 +628,21 @@ void testFunc(const int numElement, OP_TYPE type, ...) {
 }
 
 template<typename T_R, typename T_A, typename T_B>
+__device__
 T_R op_add(const T_A& a, const T_B& b) {
 	return a + b;
 }
 
 template<typename T_R, typename T_A>
-T_R op_exp(const T_A& a) {
+__device__
+T_R op_exp(const T_A a) {
 	return exp(a);
 }
 
 
 
-template<typename T_OUT, typename T_IN1, class OP>
-void benchmark(const int numElement, OP op) {
+template<typename T_OUT, typename T_IN1, class T_OP>
+void benchmark(const int numElement, T_OP op) {
 	// Allocate host memory for operands
 	T_IN1* h_in1 = new T_IN1[numElement];
 
@@ -655,13 +660,23 @@ void benchmark(const int numElement, OP op) {
 
 	// Performance computation on device
 	cout << "Computation on device done" << endl;
+	benchmark_kernel(d_out, d_in1, op, numElement);
+
+	// Copy result back from the GPU
+	T_OUT* h_out = new T_OUT[numElement];	
+	FROMGPU(h_out, d_out, sizeof(T_OUT)*numElement);
 
 	// Performance computation on host
 	cout << "Computation on host done" << endl;
 	
+	// Check results
+	for(int i = 0; i < numElement; i += 1) {
+		cout << h_out[i] << endl;
+	}
 
 	// Memory cleanup
 	delete[] h_in1;
+	delete[] h_out;
 	GPUFREE(d_in1);
 	GPUFREE(d_out);
 }
@@ -672,14 +687,26 @@ void benchmark(const int numElement, OP op) {
 }
 
 int main(int argc, char** argv) {
-	const int numElement = 1000000;
+    unsigned int old_cw;
 
-	//testFunc<double>(numElement, BINARY, 2.10, 3.10, &op_add<double, double, double>);
-	
-	//testFunc<int>(numElement, UNARY, 4, &op_exp<double, int>);
+	// Turn on
+    fpu_fix_start(&old_cw);
+	GDDStart();	
 
-	benchmark<gdd_real, gdd_real>(numElement, &op_exp<dd_real, dd_real>);
+
+    printf("==================================================================\n");
+    printf("******************** double-double precision *********************\n");
+    printf("==================================================================\n");
+    
+	const int numElement = 10;
+	benchmark<gdd_real, gdd_real>(numElement, &op_exp<gdd_real, gdd_real>);
+
+	// Shutdown
+    GQDEnd();
+    fpu_fix_end(&old_cw);
+
+	return EXIT_SUCCESS;
 }
 
 
-
+#endif /*BENCHMARK_CU*/

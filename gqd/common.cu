@@ -8,8 +8,6 @@
 #include "inline.cu"   //basic functions used by both gdd_real and gqd_real
 
 
-using namespace CUDAUtil;
-
 
 
 /* type definitions, defined in the type.h */

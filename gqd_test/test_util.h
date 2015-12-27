@@ -1,6 +1,7 @@
 #ifndef __GQD_TEST_UTIL_H__
 #define __GQD_TEST_UTIL_H__
 
+#include <iostream>
 #include "gqd_type.h"
 #include <sys/time.h>
 #include <qd/qd_real.h>
@@ -34,6 +35,12 @@ inline double getSec(struct timeval tvStart, struct timeval tvEnd) {
     double tEnd = (double) tvEnd.tv_sec + 1e-6 * tvEnd.tv_usec;
     return (tEnd - tStart);
 }
+
+std::ostream& operator<<(std::ostream& os, const gqd_real& a);
+
+std::ostream& operator<<(std::ostream& os, const gdd_real& a);
+
+
 
 #define INIT_TIMER struct timeval start, end;
 #define START_TIMER gettimeofday(&start, NULL);

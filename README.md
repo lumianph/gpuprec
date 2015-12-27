@@ -74,6 +74,7 @@ Most functions are tested extensively and but exhaustively. For basic arithmetic
 ## TODO
 1. The previous code of the test cases is pretty messy. I am working on it.
 2. Define correct error return code, e.g., NaN.
+3. Change to separate compilation for CUDA
 
 ## CITATION
 You can cite this library as:

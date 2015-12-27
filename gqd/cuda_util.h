@@ -24,7 +24,6 @@
 #define GLOBAL_THREAD_OFFSET (blockDim.x*blockIdx.x + threadIdx.x)
 
 
-namespace CUDAUtil {
 
     /*timing functions*/
     //return ms, rather than second!
@@ -117,7 +116,6 @@ namespace CUDAUtil {
 #define GPUTOGPU( DEST, SRC, MEM_SIZE ) checkCudaErrors(cudaMemcpy( DEST, SRC, MEM_SIZE, cudaMemcpyDeviceToDevice ))
 #define GPUFREE( MEM ) checkCudaErrors(cudaFree(MEM));
 
-} /*namespace CUDAUtil*/
 
 #endif /* MIAN_CUDA_UTIL_H */
 
