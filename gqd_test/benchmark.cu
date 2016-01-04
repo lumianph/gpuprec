@@ -14,11 +14,13 @@
 #include <vector>
 #include <memory>
 
+
+#include "gqd.cu"
+#include "cuda_util.h"
 #include "cuda_util.h"
 #include "test_util.h"
 #include "test_common.h"
 #include "gqdtest.h"
-#include "benchmark_kernel.cu"
 
 using namespace std;
 
@@ -627,6 +629,7 @@ void testFunc(const int numElement, OP_TYPE type, ...) {
     va_end(vl);
 }
 
+
 template<typename T_R, typename T_A, typename T_B>
 __device__
 T_R op_add(const T_A& a, const T_B& b) {
@@ -634,15 +637,48 @@ T_R op_add(const T_A& a, const T_B& b) {
 }
 
 template<typename T_R, typename T_A>
-__device__
+__host__ __device__
 T_R op_exp(const T_A a) {
 	return exp(a);
 }
 
 
+typedef gdd_real (*gdd_unary_func)(gdd_real);
+typedef dd_real (*dd_unary_func)(dd_real);
+
+__device__ gdd_unary_func gdd_pexp = op_exp<gdd_real, gdd_real>;
 
 template<typename T_OUT, typename T_IN1, class T_OP>
-void benchmark(const int numElement, T_OP op) {
+__global__
+void benchmark_kernel(T_OUT* d_out, T_IN1* d_in1, T_OP* op, const int numElement) {
+	const int numTotalThread = blockDim.x*gridDim.x;
+	const int threadOffset = blockIdx.x*blockDim.x + threadIdx.x;
+
+	for(int i = threadOffset; i < numElement; i += numTotalThread) {
+		d_out[i] = op[0](d_in1[i]);
+	}
+}
+
+
+template<class OP>
+void host_kernel(gdd_real* out, gdd_real* in1, OP op, const int numElement) {
+	dd_real* t_out = new dd_real[numElement];
+	dd_real* t_in1 = new dd_real[numElement];
+
+	gqd2qd(in1, t_in1, numElement);
+	for(int i = 0; i < numElement; i += 1) {
+		t_out[i] = op(t_in1[i]);
+	}
+	qd2gqd(t_out, out, numElement);
+
+	delete[] t_out;
+	delete[] t_in1;
+}
+
+
+
+template<typename T_OUT, typename T_IN1, class T_H_OP, class T_D_OP>
+void benchmark(const int numElement, T_H_OP h_op, T_D_OP &d_op) {
 	// Allocate host memory for operands
 	T_IN1* h_in1 = new T_IN1[numElement];
 
@@ -658,20 +694,31 @@ void benchmark(const int numElement, T_OP op) {
 	T_OUT* d_out = NULL;
 	GPUMALLOC((void**)&d_out, sizeof(T_OUT)*numElement);
 
+	// Assign the device function pointer
+	T_D_OP* h_f = (T_D_OP*)malloc(sizeof(T_D_OP));
+	T_D_OP* d_f = NULL;
+	GPUMALLOC((void**)&d_f, sizeof(T_D_OP));
+	checkCudaErrors(cudaMemcpyFromSymbol(h_f, d_op, sizeof(T_D_OP)));
+	checkCudaErrors(cudaMemcpy(d_f, h_f, sizeof(T_D_OP), cudaMemcpyHostToDevice));
+	cout << "Function pointer assignment done" << endl;
+
 	// Performance computation on device
+	benchmark_kernel<T_OUT, T_IN1, T_D_OP><<<512, 512>>>(d_out, d_in1, d_f, numElement);
+	getLastCudaError("benchmark_kernel");
 	cout << "Computation on device done" << endl;
-	benchmark_kernel(d_out, d_in1, op, numElement);
 
 	// Copy result back from the GPU
 	T_OUT* h_out = new T_OUT[numElement];	
 	FROMGPU(h_out, d_out, sizeof(T_OUT)*numElement);
 
 	// Performance computation on host
+	T_OUT* gold_out = new T_OUT[numElement];
+	host_kernel(gold_out, h_in1, h_op, numElement);
 	cout << "Computation on host done" << endl;
 	
 	// Check results
 	for(int i = 0; i < numElement; i += 1) {
-		cout << h_out[i] << endl;
+		cout << h_out[i] << ", " << gold_out[i] << endl;
 	}
 
 	// Memory cleanup
@@ -681,10 +728,6 @@ void benchmark(const int numElement, T_OP op) {
 	GPUFREE(d_out);
 }
 
-template<class OP, typename T_R, typename T_IN1, typename T_IN2>
-void benchmark(const int numElement, OP op) {
-
-}
 
 int main(int argc, char** argv) {
     unsigned int old_cw;
@@ -699,7 +742,7 @@ int main(int argc, char** argv) {
     printf("==================================================================\n");
     
 	const int numElement = 10;
-	benchmark<gdd_real, gdd_real>(numElement, &op_exp<gdd_real, gdd_real>);
+	benchmark<gdd_real, gdd_real>(numElement, &op_exp<dd_real, dd_real>, gdd_pexp);
 
 	// Shutdown
     GQDEnd();
