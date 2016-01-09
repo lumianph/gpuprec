@@ -33,14 +33,14 @@ void randArray(qd_real* data, const unsigned numElement,
     }
 }
 
-void qd2gqd(dd_real* dd_data, gdd_real* gdd_data, const unsigned int numElement) {
+void qd2gqd(const dd_real* dd_data, gdd_real* gdd_data, const unsigned int numElement) {
     for (unsigned int i = 0; i < numElement; i++) {
         gdd_data[i].x = dd_data[i].x[0];
         gdd_data[i].y = dd_data[i].x[1];
     }
 }
 
-void qd2gqd(qd_real* qd_data, gqd_real* gqd_data, const unsigned int numElement) {
+void qd2gqd(const qd_real* qd_data, gqd_real* gqd_data, const unsigned int numElement) {
     for (unsigned int i = 0; i < numElement; i++) {
         gqd_data[i].x = qd_data[i].x[0];
         gqd_data[i].y = qd_data[i].x[1];
@@ -49,14 +49,14 @@ void qd2gqd(qd_real* qd_data, gqd_real* gqd_data, const unsigned int numElement)
     }
 }
 
-void gqd2qd(gdd_real* gdd_data, dd_real* dd_data, const unsigned int numElement) {
+void gqd2qd(const gdd_real* gdd_data, dd_real* dd_data, const unsigned int numElement) {
     for (unsigned int i = 0; i < numElement; i++) {
         dd_data[i].x[0] = gdd_data[i].x;
         dd_data[i].x[1] = gdd_data[i].y;
     }
 }
 
-void gqd2qd(gqd_real* gqd_data, qd_real* qd_data, const unsigned int numElement) {
+void gqd2qd(const gqd_real* gqd_data, qd_real* qd_data, const unsigned int numElement) {
     for (unsigned int i = 0; i < numElement; i++) {
         qd_data[i].x[0] = gqd_data[i].x;
         qd_data[i].x[1] = gqd_data[i].y;
@@ -73,6 +73,32 @@ void randArray(gdd_real* data, const unsigned numElement,
 	qd2gqd(dd_data, data, numElement);
 
 	delete[] dd_data;
+}
+
+int checkTwoArray(const gdd_real* gold, const gdd_real* ref, const int numElement) {
+	dd_real* dd_gold = new dd_real[numElement];
+	dd_real* dd_ref = new dd_real[numElement];
+
+	gqd2qd(gold, dd_gold, numElement);
+	gqd2qd(ref, dd_ref, numElement);
+
+	checkTwoArray(dd_gold, dd_ref, numElement);
+
+	delete[] dd_gold;
+	delete[] dd_ref;
+}
+
+int checkTwoArray(const gqd_real* gold, const gqd_real* ref, const int numElement) {
+	qd_real* qd_gold = new qd_real[numElement];
+	qd_real* qd_ref = new qd_real[numElement];
+
+	gqd2qd(gold, qd_gold, numElement);
+	gqd2qd(ref, qd_ref, numElement);
+
+	checkTwoArray(qd_gold, qd_ref, numElement);
+
+	delete[] qd_gold;
+	delete[] qd_ref;
 }
 
 int checkTwoArray(const dd_real* gold, const dd_real* ref, const int numElement) {

@@ -17,17 +17,21 @@ void randArray(qd_real* data, const unsigned numElement,
 void randArray(gdd_real* data, const unsigned numElement,
         dd_real low, dd_real high, int seed = 0);
 
-void qd2gqd(dd_real* dd_data, gdd_real* gdd_data, const unsigned int numElement);
+void qd2gqd(const dd_real* dd_data, gdd_real* gdd_data, const unsigned int numElement);
 
-void qd2gqd(qd_real* qd_data, gqd_real* gqd_data, const unsigned int numElement);
+void qd2gqd(const qd_real* qd_data, gqd_real* gqd_data, const unsigned int numElement);
 
-void gqd2qd(gdd_real* gdd_data, dd_real* dd_data, const unsigned int numElement);
+void gqd2qd(const gdd_real* gdd_data, dd_real* dd_data, const unsigned int numElement);
 
-void gqd2qd(gqd_real* gqd_data, qd_real* qd_data, const unsigned int numElement);
+void gqd2qd(const gqd_real* gqd_data, qd_real* qd_data, const unsigned int numElement);
 
 int checkTwoArray(const dd_real* gold, const dd_real* ref, const int numElement);
 
 int checkTwoArray(const qd_real* gold, const qd_real* ref, const int numElement);
+
+int checkTwoArray(const gqd_real* gold, const gqd_real* ref, const int numElement);
+
+int checkTwoArray(const gdd_real* gold, const gdd_real* ref, const int numElement);
 
 /* timing functions */
 inline double getSec(struct timeval tvStart, struct timeval tvEnd) {
